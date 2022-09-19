@@ -1,1 +1,1 @@
-worker : python badak.py
+worker: python badak.py
