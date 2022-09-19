@@ -1,4 +1,4 @@
-discord = 2.0.0
+discord
 discord-command
 discord-ext-bot
 discord-ext-menus
