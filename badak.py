@@ -375,6 +375,3 @@ async def my_item(ctx,
         await ctx.respond(embed=embed,ephemeral = True)
     
 bot.run(token) # 봇 실행
-# url = "https://api.opensea.io/api/v1/collection/renga?format=json"
-# response = requests.request("GET", url)
-# print(response.json())
