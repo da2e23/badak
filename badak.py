@@ -375,5 +375,5 @@ async def my_item(ctx,
         embed = discord.Embed(title="**!Error" ,description='Wrong Address', color=0xe74c3c)
         await ctx.respond(embed=embed,ephemeral = True)
         
-token = os.environ.get('token')
+token = os.environ['token']
 bot.run(token) # 봇 실행
