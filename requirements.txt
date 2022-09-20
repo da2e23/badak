@@ -24,3 +24,4 @@ aiohttp
 async-timeout
 urllib3
 python-dotenv
+pydata-google-auth
