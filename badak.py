@@ -377,6 +377,5 @@ async def my_item(ctx,
         await ctx.respond(embed=embed,ephemeral = True)
 
 
-load_dotenv()
-token=os.getenv('token')        
+token=os.environ('token')      
 bot.run(token) # 봇 실행
