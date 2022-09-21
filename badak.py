@@ -13,7 +13,7 @@ from discord.ext import menus
 from discord.ext.menus import button, First, Last
 from asyncore import loop
 from discord.ext import commands
-from discord import Option
+from discord.commands import Option
 import os
 from dotenv import load_dotenv
 
