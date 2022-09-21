@@ -211,7 +211,7 @@ async def show_all(ctx):
 
 @bot.slash_command(description="Item's floor price in my wallet(내 지갑 ITEM 바닥가 보기)")
 async def my_wallet(ctx,
-    address: discord.commands.Option(str, "지갑주소 입력"), # str 타입으로 입력 받음
+    address: discord.commands.Option(str, "지갑주소 입력 (Enter yout Wallet Address"), # str 타입으로 입력 받음
     ):
     # print(discord.id)
     print(bot.get_channel)
@@ -330,7 +330,7 @@ async def my_wallet(ctx,
         
 @bot.slash_command(description="See My Collections(내 컬렉션 보기)")
 async def my_item(ctx,
-    address: discord.commands.Option(str, "지갑주소 입력"), # str 타입으로 입력 받음
+    address: discord.commands.Option(str, "지갑주소 입력 (Enter yout Wallet Address"), # str 타입으로 입력 받음
     ):
     
     url = "https://opensea15.p.rapidapi.com/api/v1/assets?format=json"
