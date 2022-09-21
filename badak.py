@@ -13,7 +13,7 @@ from discord.ext import menus
 from discord.ext.menus import button, First, Last
 from asyncore import loop
 from discord.ext import commands
-from discord import Option
+# from discord.commands import Option
 import os
 
 bot = commands.Bot(command_prefix = "/",intents=discord.Intents.all())
@@ -122,7 +122,7 @@ async def on_ready():
 @bot.command(description="Import New Project(프로젝트 추가하기)")
 # @discord.ext.commands.bot_has_any_role('Co-Founder')
 async def input_project(ctx,
-    project: Option(str, "프로젝트 키워드를 입력하세요 (Enter the Project keyword)"), # str 타입으로 입력 받음
+    project: discord.commands.Option(str, "프로젝트 키워드를 입력하세요 (Enter the Project keyword)"), # str 타입으로 입력 받음
     ):
     # print(discord.id)
     print(bot.get_channel(1020470142330749008))
