@@ -157,7 +157,7 @@ async def input_project(ctx,
 #     project: Option(str, "다음 중 고르세요.", choices=list_search),
 #     ):
 async def select_project(ctx: discord.ApplicationContext,
-    project: Option(str, "프로젝트 명을 입력하세요 (Enter Project Name)", autocomplete=list_search),
+    project: discord.commands.Option(str, "프로젝트 명을 입력하세요 (Enter Project Name)", autocomplete=list_search),
     ):
     url = f"https://api.opensea.io/api/v1/collection/{project}?format=json"
     response = requests.request("GET", url)
@@ -212,7 +212,7 @@ async def show_all(ctx):
 
 @bot.command(description="Item's floor price in my wallet(내 지갑 ITEM 바닥가 보기)")
 async def my_wallet(ctx,
-    address: Option(str, "지갑주소 입력 (Enter yout Wallet Address"), # str 타입으로 입력 받음
+    address: discord.commands.Option(str, "지갑주소 입력 (Enter yout Wallet Address"), # str 타입으로 입력 받음
     ):
     # print(discord.id)
     print(bot.get_channel)
@@ -331,7 +331,7 @@ async def my_wallet(ctx,
         
 @bot.command(description="See My Collections(내 컬렉션 보기)")
 async def my_item(ctx,
-    address: Option(str, "지갑주소 입력 (Enter yout Wallet Address"), # str 타입으로 입력 받음
+    address: discord.commands.Option(str, "지갑주소 입력 (Enter yout Wallet Address"), # str 타입으로 입력 받음
     ):
     
     url = "https://opensea15.p.rapidapi.com/api/v1/assets?format=json"
