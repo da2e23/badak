@@ -17,7 +17,7 @@ import os
 
 bot = commands.Bot(command_prefix = "/",intents=discord.Intents.all())
 project_list =[]
-async def list_search(ctx):
+async def list_search(ctx:discord.ApplicationContext):
     return sorted([i for i in worksheet.col_values(1) if i.startswith(ctx.value.lower())]) # from your database
 
 #지갑 바닥가 가져오기
