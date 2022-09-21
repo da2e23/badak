@@ -15,7 +15,7 @@ from asyncore import loop
 from discord.ext import commands
 import os
 
-bot = discord.Bot()
+bot = commands.Bot(command_prefix = "/",intents=discord.Intents.all())
 project_list =[]
 async def list_search(ctx:discord.ApplicationContext):
     return sorted([i for i in worksheet.col_values(1) if i.startswith(ctx.value.lower())]) # from your database
@@ -118,7 +118,7 @@ async def on_ready():
     print(bot.user.id)
     print('====================================')
 
-@bot.slash_command(description="Import New Project(프로젝트 추가하기)")
+@bot.command(description="Import New Project(프로젝트 추가하기)")
 # @discord.ext.commands.bot_has_any_role('Co-Founder')
 async def input_project(ctx,
     project: discord.commands.Option(str, "프로젝트 키워드를 입력하세요 (Enter the Project keyword)"), # str 타입으로 입력 받음
@@ -151,7 +151,7 @@ async def input_project(ctx,
     #     return None
 
 #바닥가 검색
-@bot.slash_command(description="Search Floor Price(바닥가 보기)")
+@bot.command(description="Search Floor Price(바닥가 보기)")
 # async def select_project(ctx,
 #     project: Option(str, "다음 중 고르세요.", choices=list_search),
 #     ):
@@ -201,7 +201,7 @@ async def select_project(ctx: discord.ApplicationContext,
         embed = discord.Embed(title="Error" ,description='There is no such project', color=0xe74c3c)
         await ctx.respond(embed=embed,ephemeral = True)
         
-@bot.slash_command(description="Whole list of project(전체 리스트 보기)")
+@bot.command(description="Whole list of project(전체 리스트 보기)")
 async def show_all(ctx):
     list = sorted(worksheet.col_values(1))
     formatter = MySource(list, per_page=8)
@@ -209,7 +209,7 @@ async def show_all(ctx):
     await menu.start(ctx)
     
 
-@bot.slash_command(description="Item's floor price in my wallet(내 지갑 ITEM 바닥가 보기)")
+@bot.command(description="Item's floor price in my wallet(내 지갑 ITEM 바닥가 보기)")
 async def my_wallet(ctx,
     address: discord.commands.Option(str, "지갑주소 입력 (Enter yout Wallet Address"), # str 타입으로 입력 받음
     ):
@@ -273,7 +273,7 @@ async def my_wallet(ctx,
         await ctx.respond(embed=embed,ephemeral = True)
     
 
-# @bot.slash_command(description="Item's floor price in my klaytn wallet (내 지갑 klaytn ITEM 바닥가 보기)")
+# @bot.command(description="Item's floor price in my klaytn wallet (내 지갑 klaytn ITEM 바닥가 보기)")
 # async def my_wallet_klaytn(ctx,
 #     address: discord.commands.Option(str, "지갑주소 입력"), # str 타입으로 입력 받음
 #     ):
@@ -328,7 +328,7 @@ async def my_wallet(ctx,
 #     await menu.start(ctx)
 #     # await ctx.send("수정중")
         
-@bot.slash_command(description="See My Collections(내 컬렉션 보기)")
+@bot.command(description="See My Collections(내 컬렉션 보기)")
 async def my_item(ctx,
     address: discord.commands.Option(str, "지갑주소 입력 (Enter yout Wallet Address"), # str 타입으로 입력 받음
     ):
