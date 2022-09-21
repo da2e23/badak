@@ -26,3 +26,4 @@ aiohttp
 async-timeout
 urllib3
 pydata-google-auth
+oauth2client
