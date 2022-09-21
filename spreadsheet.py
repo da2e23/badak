@@ -20,7 +20,7 @@ CREDENTIALS = {
 
 credentials = ServiceAccountCredentials.from_json_keyfile_name(CREDENTIALS, scope)
 gc = gspread.authorize(credentials)
-spreadsheet_url = os.environ('SPREAD_SHEETS_URL')
+spreadsheet_url = os.environ.get("SPREAD_SHEETS_URL")
 # 스프레스시트 문서 가져오기 
 doc = gc.open_by_url(spreadsheet_url)
 # 시트 선택하기
