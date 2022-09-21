@@ -13,7 +13,7 @@ from discord.ext import menus
 from discord.ext.menus import button, First, Last
 from asyncore import loop
 from discord.ext import commands
-from discord.ext.commands import Option
+from discord.commands import Option
 import os
 
 bot = commands.Bot(command_prefix = "/",intents=discord.Intents.all())
