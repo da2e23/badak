@@ -19,7 +19,7 @@ from discord.commands import Option
 import os
 from dotenv import load_dotenv
 
-bot = discord.Bot()
+bot = commands.Bot(command_prefix = "/",intents=discord.Intents.all())
 project_list =[]
 async def list_search(ctx: discord.AutocompleteContext):
     return sorted([i for i in worksheet.col_values(1) if i.startswith(ctx.value.lower())]) # from your database
