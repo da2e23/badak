@@ -15,7 +15,7 @@ from asyncore import loop
 from discord.ext import commands
 import os
 
-bot = discord.Bot(command_prefix = "/",intents=discord.Intents.all())
+bot = discord.Bot()
 project_list =[]
 async def list_search(ctx:discord.ApplicationContext):
     return sorted([i for i in worksheet.col_values(1) if i.startswith(ctx.value.lower())]) # from your database
