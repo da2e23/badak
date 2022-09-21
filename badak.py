@@ -1,7 +1,6 @@
 from asyncio.windows_events import NULL
 from email import message
 from multiprocessing.connection import wait
-from tkinter import HIDDEN
 import requests
 from concurrent.futures import ThreadPoolExecutor
 from urllib.request import Request, urlopen
@@ -15,7 +14,7 @@ from discord.ext import menus
 from discord.ext.menus import button, First, Last
 from asyncore import loop
 from discord.ext import commands
-from discord.commands import Option
+from discord import Option
 import os
 from dotenv import load_dotenv
 
@@ -377,5 +376,5 @@ async def my_item(ctx,
         await ctx.respond(embed=embed,ephemeral = True)
 
 
-token=os.environ('token')      
+token=os.environ.get('token')      
 bot.run(token) # 봇 실행
