@@ -214,11 +214,10 @@ async def show_all(ctx):
     formatter = MySource(list, per_page=8)
     menu = menus.MenuPages(formatter)
     await menu.start(ctx)
-    
 
 @bot.slash_command(description="Item's floor price in my wallet(내 지갑 ITEM 바닥가 보기)")
-async def my_wallet(ctx,
-    address: Option(str, "지갑주소 입력 (Enter yout Wallet Address"), # str 타입으로 입력 받음
+async def my_wallet(interaction: Interaction,
+    address: str = SlashOption(name="address", description="ETH 지갑주소 입력 (Enter your ETH Wallet Address"),
     ):
     # print(discord.id)
     print(bot.get_channel)
@@ -263,8 +262,8 @@ async def my_wallet(ctx,
         
         formatter = MySource_price(all_data, per_page=7)
         menu = MyMenuPages(formatter,timeout=6.0, delete_message_after=True)
-        await menu.start(ctx)
-        await ctx.respond("Successful", ephemeral = True)
+        await menu.start(interaction)
+        await interaction.reply("Successful", ephemeral = True)
         # global time_second
         # message = await ctx.send('5초 후에 삭제됩니다.')
         # for x in range(5,0,-1):# This works well as it should!
@@ -277,7 +276,7 @@ async def my_wallet(ctx,
         #     await message.edit(content=content)
     except KeyError:
         embed = discord.Embed(title="Error" ,description='Wrong Address', color=0xe74c3c)
-        await ctx.respond(embed=embed,ephemeral = True)
+        await interaction.reply(embed=embed,ephemeral = True)
     
 
 # @bot.slash_command(description="Item's floor price in my klaytn wallet (내 지갑 klaytn ITEM 바닥가 보기)")
@@ -337,7 +336,7 @@ async def my_wallet(ctx,
 
 @bot.slash_command(description="See My Collections(내 컬렉션 보기)")
 async def my_item(interaction: Interaction,
-    address: str = SlashOption(name="address", description="지갑주소 입력 (Enter yout Wallet Address"),  
+    address: str = SlashOption(name="address", description=" ETH 지갑주소 입력 (Enter your ETH Wallet Address"),  
     ):
     
     url = "https://opensea15.p.rapidapi.com/api/v1/assets?format=json"
