@@ -122,37 +122,36 @@ async def on_ready():
     print(bot.user.id)
     print('====================================')
 
-# @bot.slash_command(description="Import New Project(프로젝트 추가하기)")
-# # @discord.ext.commands.bot_has_any_role('Co-Founder')
-# async def input_project(ctx,
-#     project: Option(str, "프로젝트 키워드를 입력하세요 (Enter the Project keyword)"), # str 타입으로 입력 받음
-#     ):
-#     # print(discord.id)
-#     print(bot.get_channel(1020470142330749008))
-#     list = worksheet.col_values(1)
-#     if project in list:
-#         embed = discord.Embed(title="Error" ,description=project+'는 이미 존재하는 Project 입니다.', color=0xe67e22)
-#         embed.set_footer(text="Honey Bottle")
-#         await ctx.respond(embed=embed) # f-string 사용
-#         return None
-#     else: 
-#         url = "https://api.opensea.io/api/v1/collection/"+project+"?format=json"
-#         response = requests.request("GET", url)
-#         try:    
-#             project_name  = response.json()['collection']['name']
-#             worksheet.append_row([project])
-#             embed = discord.Embed(title=project_name ,description=project_name+'를 추가하였습니다.', color=0x3498db)
-#             embed.add_field(name="Open Sea", value=f"[link](https://opensea.io/collection/{project})", inline=False)
-#             embed.set_footer(text="Honey Bottle🍯 | Badak")
-#             await ctx.respond(embed=embed)
-#         except KeyError:
-#             embed = discord.Embed(title="Error" ,description='You enter wrong keyword', color=0xe74c3c)
-#             await ctx.respond(embed=embed,ephemeral = True)
-#     # else:
-#     #     embed = discord.Embed(title="Error" ,description='이곳에서는 입력할 수 없는 명령어 입니다.', color=0x62c1cc)
-#     #     embed.set_footer(text="Honey Bottle")
-#     #     await ctx.respond(embed=embed) # f-string 사용
-#     #     return None
+@bot.slash_command(description="Import New Project(프로젝트 추가하기)")
+# @discord.ext.commands.bot_has_any_role('Co-Founder')
+async def input_project(interaction: Interaction,
+    project: str = SlashOption(name="project", description="프로젝트 키워드를 입력하세요 (Enter the Project keyword)"),
+    ):
+    # print(discord.id)
+    list = worksheet.col_values(1)
+    if project in list:
+        embed = discord.Embed(title="Error" ,description=project+'는 이미 존재하는 Project 입니다.', color=0xe67e22)
+        embed.set_footer(text="Honey Bottle")
+        await interaction.reply(embed=embed) # f-string 사용
+        return None
+    else: 
+        url = "https://api.opensea.io/api/v1/collection/"+project+"?format=json"
+        response = requests.request("GET", url)
+        try:    
+            project_name  = response.json()['collection']['name']
+            worksheet.append_row([project])
+            embed = discord.Embed(title=project_name ,description=project_name+'를 추가하였습니다.', color=0x3498db)
+            embed.add_field(name="Open Sea", value=f"[link](https://opensea.io/collection/{project})", inline=False)
+            embed.set_footer(text="Honey Bottle🍯 | Badak")
+            await interaction.reply(embed=embed,ephemeral = True)
+        except KeyError:
+            embed = discord.Embed(title="Error" ,description='You enter wrong keyword', color=0xe74c3c)
+            await interaction.reply(embed=embed,ephemeral = True)
+    # else:
+    #     embed = discord.Embed(title="Error" ,description='이곳에서는 입력할 수 없는 명령어 입니다.', color=0x62c1cc)
+    #     embed.set_footer(text="Honey Bottle")
+    #     await ctx.respond(embed=embed) # f-string 사용
+    #     return None
 
 #바닥가 검색
 @bot.slash_command(description="Search Floor Price(바닥가 보기)")
@@ -209,177 +208,178 @@ async def select_project(interaction: Interaction,
         embed = discord.Embed(title="Error" ,description='There is no such project', color=0xe74c3c)
         await interaction.reply(embed=embed,ephemeral = True)
         
-# @bot.slash_command(description="Whole list of project(전체 리스트 보기)")
-# async def show_all(ctx):
-#     list = sorted(worksheet.col_values(1))
-#     formatter = MySource(list, per_page=8)
-#     menu = menus.MenuPages(formatter)
-#     await menu.start(ctx)
+@bot.slash_command(description="Whole list of project(전체 리스트 보기)")
+async def show_all(ctx):
+    list = sorted(worksheet.col_values(1))
+    formatter = MySource(list, per_page=8)
+    menu = menus.MenuPages(formatter)
+    await menu.start(ctx)
     
 
-# @bot.slash_command(description="Item's floor price in my wallet(내 지갑 ITEM 바닥가 보기)")
-# async def my_wallet(ctx,
-#     address: Option(str, "지갑주소 입력 (Enter yout Wallet Address"), # str 타입으로 입력 받음
+@bot.slash_command(description="Item's floor price in my wallet(내 지갑 ITEM 바닥가 보기)")
+async def my_wallet(ctx,
+    address: Option(str, "지갑주소 입력 (Enter yout Wallet Address"), # str 타입으로 입력 받음
+    ):
+    # print(discord.id)
+    print(bot.get_channel)
+    
+    url = f"https://api.opensea.io/api/v1/collections?asset_owner={address}&format=json&limit=300&offset=0"
+    response = requests.request("GET", url)
+    own_project_list = response.json()
+    list_project_name=[]
+    list_project_floorprice=[]
+    list_project_floorprice_link=[]
+    list_project_opensea_slug=[]
+    list_project_opensea_link=[]
+    try: 
+        for i in range(len(own_project_list)):
+            list_project_name.append(response.json()[i]['name'])
+            list_project_opensea_slug.append(response.json()[i]['slug'])
+        for j in range(len(list_project_opensea_slug)):
+            get_my_link(list_project_opensea_link,list_project_opensea_slug[j])
+        for j in list_project_opensea_slug:
+            list_project_floorprice_link.append(f"https://api.opensea.io/api/v1/collection/{j}?format=json")
+        async with aiohttp.ClientSession() as session:
+            tasks = []
+            for url in list_project_floorprice_link:
+                tasks.append(asyncio.ensure_future(get_own_floorprice(session, url)))
+            list_project_floorprice = await asyncio.gather(*tasks)
+        global gs
+        gs.get_total_sum(list_project_floorprice)
+        print(gs.get_total_sum)
+        
+        print("number of project : "+str(len(list_project_name)))     
+        # result = await [requests.request("GET", url).json()['collection']['stats']['floor_price'] for url in list_project_floorprice_link]
+        print(list_project_floorprice)
+        
+        all_data = []
+        temp=[]
+        for i in range(len(list_project_name)):
+            temp.append(list_project_name[i])
+            temp.append(list_project_floorprice[i])
+            temp.append(list_project_opensea_link[i])
+            all_data.append(temp)
+            temp = []
+        
+        formatter = MySource_price(all_data, per_page=7)
+        menu = MyMenuPages(formatter,timeout=6.0, delete_message_after=True)
+        await menu.start(ctx)
+        await ctx.respond("Successful", ephemeral = True)
+        # global time_second
+        # message = await ctx.send('5초 후에 삭제됩니다.')
+        # for x in range(5,0,-1):# This works well as it should!
+        #     await asyncio.sleep(1)
+        #     print("time 값 확인 1 : "+str(time_second.time))
+        #     if time_second.time ==5:
+        #         x = time_second.time
+        #     print("time 값 확인 2 : "+str(time_second.time))
+        #     content = f'{x}초 후에 삭제됩니다.'
+        #     await message.edit(content=content)
+    except KeyError:
+        embed = discord.Embed(title="Error" ,description='Wrong Address', color=0xe74c3c)
+        await ctx.respond(embed=embed,ephemeral = True)
+    
+
+# @bot.slash_command(description="Item's floor price in my klaytn wallet (내 지갑 klaytn ITEM 바닥가 보기)")
+# async def my_wallet_klaytn(ctx,
+#     address: discord.commands.Option(str, "지갑주소 입력"), # str 타입으로 입력 받음
 #     ):
 #     # print(discord.id)
 #     print(bot.get_channel)
     
-#     url = f"https://api.opensea.io/api/v1/collections?asset_owner={address}&format=json&limit=300&offset=0"
-#     response = requests.request("GET", url)
-#     own_project_list = response.json()
+#     url = f"https://api.opensea.io/v2/assets/klaytn?format=json"
+#     querystring = {"asset_owner":address,"order_direction":"desc","limit":"20"}
+#     headers = {
+#     }
+#     response = requests.request("GET", url, headers=headers, params=querystring)
+#     own_project_list = response.json()['results']
+#     print(own_project_list[0])
+#     print('own project num : '+str(len(own_project_list)))
 #     list_project_name=[]
 #     list_project_floorprice=[]
 #     list_project_floorprice_link=[]
 #     list_project_opensea_slug=[]
 #     list_project_opensea_link=[]
-#     try: 
-#         for i in range(len(own_project_list)):
-#             list_project_name.append(response.json()[i]['name'])
-#             list_project_opensea_slug.append(response.json()[i]['slug'])
-#         for j in range(len(list_project_opensea_slug)):
-#             get_my_link(list_project_opensea_link,list_project_opensea_slug[j])
-#         for j in list_project_opensea_slug:
-#             list_project_floorprice_link.append(f"https://api.opensea.io/api/v1/collection/{j}?format=json")
-#         async with aiohttp.ClientSession() as session:
-#             tasks = []
-#             for url in list_project_floorprice_link:
-#                 tasks.append(asyncio.ensure_future(get_own_floorprice(session, url)))
-#             list_project_floorprice = await asyncio.gather(*tasks)
-#         global gs
-#         gs.get_total_sum(list_project_floorprice)
-#         print(gs.get_total_sum)
-        
-#         print("number of project : "+str(len(list_project_name)))     
-#         # result = await [requests.request("GET", url).json()['collection']['stats']['floor_price'] for url in list_project_floorprice_link]
-#         print(list_project_floorprice)
-        
-#         all_data = []
-#         temp=[]
-#         for i in range(len(list_project_name)):
-#             temp.append(list_project_name[i])
-#             temp.append(list_project_floorprice[i])
-#             temp.append(list_project_opensea_link[i])
-#             all_data.append(temp)
-#             temp = []
-        
-#         formatter = MySource_price(all_data, per_page=7)
-#         menu = MyMenuPages(formatter,timeout=6.0, delete_message_after=True)
-#         await menu.start(ctx)
-#         await ctx.respond("Successful", ephemeral = True)
-#         # global time_second
-#         # message = await ctx.send('5초 후에 삭제됩니다.')
-#         # for x in range(5,0,-1):# This works well as it should!
-#         #     await asyncio.sleep(1)
-#         #     print("time 값 확인 1 : "+str(time_second.time))
-#         #     if time_second.time ==5:
-#         #         x = time_second.time
-#         #     print("time 값 확인 2 : "+str(time_second.time))
-#         #     content = f'{x}초 후에 삭제됩니다.'
-#         #     await message.edit(content=content)
-#     except KeyError:
-#         embed = discord.Embed(title="Error" ,description='Wrong Address', color=0xe74c3c)
-#         await ctx.respond(embed=embed,ephemeral = True)
     
+#     for i in range(len(own_project_list)):
+#         list_project_name.append(own_project_list[i]['name'])
+#         list_project_opensea_slug.append(own_project_list[i]['collection']['slug'])
+#     for j in range(len(list_project_opensea_slug)):
+#         get_my_link(list_project_opensea_link,list_project_opensea_slug[j])
+#     for j in list_project_opensea_slug:
+#         list_project_floorprice_link.append(f"https://api.opensea.io/api/v1/collection/{j}?format=json")
+#     async with aiohttp.ClientSession() as session:
+#         tasks = []
+#         for url in list_project_floorprice_link:
+#             tasks.append(asyncio.ensure_future(get_own_floorprice(session, url)))
+#         list_project_floorprice = await asyncio.gather(*tasks)
+#     global gs
+#     gs.get_total_sum(list_project_floorprice)
+#     print(gs.get_total_sum)
+    
+#     print("number of project : "+str(len(list_project_name)))     
+#     # result = await [requests.request("GET", url).json()['collection']['stats']['floor_price'] for url in list_project_floorprice_link]
+#     print(list_project_floorprice)
+    
+#     all_data = []
+#     temp=[]
+#     for i in range(len(list_project_name)):
+#         temp.append(list_project_name[i])
+#         temp.append(list_project_floorprice[i])
+#         temp.append(list_project_opensea_link[i])
+#         all_data.append(temp)
+#         temp = []
+    
+#     formatter = MySource_price(all_data, per_page=7)
+#     menu = menus.MenuPages(formatter,timeout=5.0, delete_message_after=True)
+#     await menu.start(ctx)
+#     # await ctx.send("수정중")
 
-# # @bot.slash_command(description="Item's floor price in my klaytn wallet (내 지갑 klaytn ITEM 바닥가 보기)")
-# # async def my_wallet_klaytn(ctx,
-# #     address: discord.commands.Option(str, "지갑주소 입력"), # str 타입으로 입력 받음
-# #     ):
-# #     # print(discord.id)
-# #     print(bot.get_channel)
+@bot.slash_command(description="See My Collections(내 컬렉션 보기)")
+async def my_item(interaction: Interaction,
+    address: str = SlashOption(name="address", description="지갑주소 입력 (Enter yout Wallet Address"),  
+    ):
     
-# #     url = f"https://api.opensea.io/v2/assets/klaytn?format=json"
-# #     querystring = {"asset_owner":address,"order_direction":"desc","limit":"20"}
-# #     headers = {
-# #     }
-# #     response = requests.request("GET", url, headers=headers, params=querystring)
-# #     own_project_list = response.json()['results']
-# #     print(own_project_list[0])
-# #     print('own project num : '+str(len(own_project_list)))
-# #     list_project_name=[]
-# #     list_project_floorprice=[]
-# #     list_project_floorprice_link=[]
-# #     list_project_opensea_slug=[]
-# #     list_project_opensea_link=[]
-    
-# #     for i in range(len(own_project_list)):
-# #         list_project_name.append(own_project_list[i]['name'])
-# #         list_project_opensea_slug.append(own_project_list[i]['collection']['slug'])
-# #     for j in range(len(list_project_opensea_slug)):
-# #         get_my_link(list_project_opensea_link,list_project_opensea_slug[j])
-# #     for j in list_project_opensea_slug:
-# #         list_project_floorprice_link.append(f"https://api.opensea.io/api/v1/collection/{j}?format=json")
-# #     async with aiohttp.ClientSession() as session:
-# #         tasks = []
-# #         for url in list_project_floorprice_link:
-# #             tasks.append(asyncio.ensure_future(get_own_floorprice(session, url)))
-# #         list_project_floorprice = await asyncio.gather(*tasks)
-# #     global gs
-# #     gs.get_total_sum(list_project_floorprice)
-# #     print(gs.get_total_sum)
-    
-# #     print("number of project : "+str(len(list_project_name)))     
-# #     # result = await [requests.request("GET", url).json()['collection']['stats']['floor_price'] for url in list_project_floorprice_link]
-# #     print(list_project_floorprice)
-    
-# #     all_data = []
-# #     temp=[]
-# #     for i in range(len(list_project_name)):
-# #         temp.append(list_project_name[i])
-# #         temp.append(list_project_floorprice[i])
-# #         temp.append(list_project_opensea_link[i])
-# #         all_data.append(temp)
-# #         temp = []
-    
-# #     formatter = MySource_price(all_data, per_page=7)
-# #     menu = menus.MenuPages(formatter,timeout=5.0, delete_message_after=True)
-# #     await menu.start(ctx)
-# #     # await ctx.send("수정중")
+    url = "https://opensea15.p.rapidapi.com/api/v1/assets?format=json"
+    querystring = {"owner":address,"order_direction":"desc","limit":"20"}
+    headers = {
+        "X-RapidAPI-Key": "d5d5061b60msh9960a0ae1b1e167p1592c2jsnf301f946ab17",
+        "X-RapidAPI-Host": "opensea15.p.rapidapi.com"
+    }
+    response = requests.request("GET", url, headers=headers, params=querystring)
+    try: 
+        own_item_list = response.json()['assets']
+        list_item_name=[]
+        list_item_image=[]
         
-# @bot.slash_command(description="See My Collections(내 컬렉션 보기)")
-# async def my_item(ctx,
-#     address: Option(str, "지갑주소 입력 (Enter yout Wallet Address"), # str 타입으로 입력 받음
-#     ):
-    
-#     url = "https://opensea15.p.rapidapi.com/api/v1/assets?format=json"
-#     querystring = {"owner":address,"order_direction":"desc","limit":"20"}
-#     headers = {
-#         "X-RapidAPI-Key": "d5d5061b60msh9960a0ae1b1e167p1592c2jsnf301f946ab17",
-#         "X-RapidAPI-Host": "opensea15.p.rapidapi.com"
-#     }
-#     response = requests.request("GET", url, headers=headers, params=querystring)
-#     try: 
-#         own_item_list = response.json()['assets']
-#         list_item_name=[]
-#         list_item_image=[]
-        
-#         for i in range(len(own_item_list)):
-#             list_item_name.append(response.json()['assets'][i]['name'])
-#             list_item_image.append(response.json()['assets'][i]['image_url'])
+        for i in range(len(own_item_list)):
+            list_item_name.append(response.json()['assets'][i]['name'])
+            list_item_image.append(response.json()['assets'][i]['image_url'])
 
-#         all_data = []
-#         temp=[]
-#         for i in range(len(own_item_list)):
-#             temp.append(list_item_name[i])
-#             temp.append(list_item_image[i])
-#             all_data.append(temp)
-#             if len(temp) >2:
-#                 temp = []
-#         # for i in range(len(own_item_list)):
-#         #     embed.add_field(name="item", value=list_item_name[i], inline=True)
-#         #     embed.add_field(name="Image", value="\u200b",image = list_item_image[i], inline=True)
-#         #     embed.add_field(name="\u200b", value="\u200b", inline=True)
-#         # embed.set_footer(text="Honey Bottle🍯 | Badak")
-#         # await ctx.respond(embed=embed) # f-string 사용
-#         formatter = MySource_item(all_data, per_page=1)
-#         menu = MyMenuPages(formatter,timeout=5.0, delete_message_after=True)
-#         await menu.start(ctx)
-#         await ctx.respond("Successful", ephemeral = True)
-#     # await ApplicationContext.send(content='',ephemeral=True,embeds = menu, delete_after=30)
-#     except KeyError:
-#         embed = discord.Embed(title="**!Error" ,description='Wrong Address', color=0xe74c3c)
-#         await ctx.respond(embed=embed,ephemeral = True)
+        all_data = []
+        temp=[]
+        for i in range(len(own_item_list)):
+            temp.append(list_item_name[i])
+            temp.append(list_item_image[i])
+            all_data.append(temp)
+            if len(temp) >2:
+                temp = []
+        # for i in range(len(own_item_list)):
+        #     embed.add_field(name="item", value=list_item_name[i], inline=True)
+        #     embed.add_field(name="Image", value="\u200b",image = list_item_image[i], inline=True)
+        #     embed.add_field(name="\u200b", value="\u200b", inline=True)
+        # embed.set_footer(text="Honey Bottle🍯 | Badak")
+        # await ctx.respond(embed=embed) # f-string 사용
+        formatter = MySource_item(all_data, per_page=1)
+        menu = MyMenuPages(formatter,timeout=5.0, delete_message_after=True)
+        await menu.start(interaction)
+        await interaction.reply("Successful", ephemeral = True)
+    # await ApplicationContext.send(content='',ephemeral=True,embeds = menu, delete_after=30)
+    except KeyError:
+        embed = discord.Embed(title="**!Error" ,description='Wrong Address', color=0xe74c3c)
+        await interaction.respond(embed=embed,ephemeral = True)
 
 
 token=os.environ.get('token')      
-bot.run(token) # 봇 실행
+port = int(os.environ.get("PORT", 17995))
+bot.run(token, host='0.0.0.0', port=port) # 봇 실행
