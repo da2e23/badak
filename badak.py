@@ -22,8 +22,8 @@ import os
 # bot = commands.Bot(command_prefix = "/",intents=discord.Intents.all())
 bot = commands.Bot()
 project_list =[]
-async def list_search(interaction):
-    return sorted([i for i in worksheet.col_values(1) if i.startswith(interaction.value.lower())]) # from your database
+async def list_search(ctx: discord.AutocompleteContext):
+    return sorted([i for i in worksheet.col_values(1) if i.startswith(ctx.value.lower())]) # from your database
 
 #지갑 바닥가 가져오기
 async def get_own_floorprice(session,url):
@@ -159,7 +159,7 @@ async def input_project(interaction: Interaction,
 #바닥가 검색
 @bot.slash_command(description="Search Floor Price(바닥가 보기)")
 async def select_project(interaction: Interaction,
-    project: str = SlashOption(name="project", description="프로젝트 명을 입력하세요 (Enter Project Name)",choices=list_search),
+    project: str = SlashOption(name="project", description="프로젝트 명을 입력하세요 (Enter Project Name)",autocomplete=list_search),
     ):
     url = f"https://api.opensea.io/api/v1/collection/{project}?format=json"
     response = requests.request("GET", url)
