@@ -13,7 +13,7 @@ from discord.ext import menus
 from discord.ext.menus import button, First, Last
 from asyncore import loop
 from discord.ext import commands
-# from discord.commands import Option
+from discord import option
 import os
 
 bot = commands.Bot(command_prefix = "/",intents=discord.Intents.all())
@@ -121,13 +121,16 @@ async def on_ready():
 
 @bot.command(description="Import New Project(프로젝트 추가하기)")
 # @discord.ext.commands.bot_has_any_role('Co-Founder')
-async def input_project(ctx,
-    project: discord.Option(str, "프로젝트 키워드를 입력하세요 (Enter the Project keyword)"), # str 타입으로 입력 받음
-    ):
+@option(
+    "projectName",
+    str, 
+    description="프로젝트 키워드를 입력하세요 (Enter the Project keyword)"
+)
+async def input_project(ctx,projectName):
     # print(discord.id)
     print(bot.get_channel(1020470142330749008))
     list = worksheet.col_values(1)
-    if project in list:
+    if {projectName} in list:
         embed = discord.Embed(title="Error" ,description=project+'는 이미 존재하는 Project 입니다.', color=0xe67e22)
         embed.set_footer(text="Honey Bottle")
         await ctx.respond(embed=embed) # f-string 사용
@@ -137,7 +140,7 @@ async def input_project(ctx,
         response = requests.request("GET", url)
         try:    
             project_name  = response.json()['collection']['name']
-            worksheet.append_row([project])
+            worksheet.append_row([{projectName}])
             embed = discord.Embed(title=project_name ,description=project_name+'를 추가하였습니다.', color=0x3498db)
             embed.add_field(name="Open Sea", value=f"[link](https://opensea.io/collection/{project})", inline=False)
             embed.set_footer(text="Honey Bottle🍯 | Badak")
