@@ -204,11 +204,12 @@ async def select_project(interaction: Interaction,
         await interaction.reply(embed=embed,ephemeral = True)
         
 @bot.slash_command(description="Whole list of project(전체 리스트 보기)")
-async def show_all(ctx):
+async def show_all(ctx,interaction:Interaction):
     list = sorted(worksheet.col_values(1))
     formatter = MySource(list, per_page=8)
     menu = menus.MenuPages(formatter)
     await menu.start(ctx)
+    await interaction.response.send_message("Successful", ephemeral = True)
 
 @bot.slash_command(description="Item's floor price in my wallet(내 지갑 ITEM 바닥가 보기)")
 async def my_wallet(ctx,interaction: Interaction,
