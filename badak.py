@@ -211,7 +211,7 @@ async def show_all(ctx):
     await menu.start(ctx)
 
 @bot.slash_command(description="Item's floor price in my wallet(내 지갑 ITEM 바닥가 보기)")
-async def my_wallet(interaction: Interaction,
+async def my_wallet(ctx,interaction: Interaction,
     address: str = SlashOption(name="address", description="ETH 지갑주소 입력 (Enter your ETH Wallet Address"),
     ):
     # print(discord.id)
@@ -257,7 +257,7 @@ async def my_wallet(interaction: Interaction,
         
         formatter = MySource_price(all_data, per_page=7)
         menu = MyMenuPages(formatter,timeout=6.0, delete_message_after=True)
-        await menu.start(interaction)
+        await menu.start(ctx)
         await interaction.reply("Successful", ephemeral = True)
         # global time_second
         # message = await ctx.send('5초 후에 삭제됩니다.')
@@ -330,7 +330,7 @@ async def my_wallet(interaction: Interaction,
 #     # await ctx.send("수정중")
 
 @bot.slash_command(description="See My Collections(내 컬렉션 보기)")
-async def my_item(interaction: Interaction,
+async def my_item(ctx,interaction: Interaction,
     address: str = SlashOption(name="address", description=" ETH 지갑주소 입력 (Enter your ETH Wallet Address"),  
     ):
     
@@ -366,7 +366,7 @@ async def my_item(interaction: Interaction,
         # await ctx.respond(embed=embed) # f-string 사용
         formatter = MySource_item(all_data, per_page=1)
         menu = MyMenuPages(formatter,timeout=5.0, delete_message_after=True)
-        await menu.start(interaction)
+        await menu.start(ctx)
         await interaction.reply("Successful", ephemeral = True)
     # await ApplicationContext.send(content='',ephemeral=True,embeds = menu, delete_after=30)
     except KeyError:
