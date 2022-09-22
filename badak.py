@@ -124,10 +124,11 @@ async def on_ready():
     print('====================================')
 
 @bot.slash_command(description="Import New Project(프로젝트 추가하기)")
+# @discord.ext.commands.bot_has_any_role('Co-Founder')
 async def input_project(interaction: Interaction,
-    project: str = SlashOption(name="project", description="프로젝트 키워드를 입력하세요 (Enter the Project keyword)"),
+    project: str = SlashOption(name="project", description="프로젝트 키워드를 입력하세요 (Enter Project Keyword)"), # str 타입으로 입력 받음
     ):
-   # print(discord.id)
+    # print(discord.id)
     print(bot.get_channel(1020470142330749008))
     list = worksheet.col_values(1)
     if project in list:
@@ -140,7 +141,7 @@ async def input_project(interaction: Interaction,
         response = requests.request("GET", url)
         try:    
             project_name  = response.json()['collection']['name']
-            worksheet.append_row([{project}])
+            worksheet.append_row([project])
             embed = discord.Embed(title=project_name ,description=project_name+'를 추가하였습니다.', color=0x3498db)
             embed.add_field(name="Open Sea", value=f"[link](https://opensea.io/collection/{project})", inline=False)
             embed.set_footer(text="Honey Bottle🍯 | Badak")
@@ -148,6 +149,11 @@ async def input_project(interaction: Interaction,
         except KeyError:
             embed = discord.Embed(title="Error" ,description='You enter wrong keyword', color=0xe74c3c)
             await interaction.reply(embed=embed,ephemeral = True)
+    # else:
+    #     embed = discord.Embed(title="Error" ,description='이곳에서는 입력할 수 없는 명령어 입니다.', color=0x62c1cc)
+    #     embed.set_footer(text="Honey Bottle")
+    #     await ctx.respond(embed=embed) # f-string 사용
+    #     return None
 
 #바닥가 검색
 @bot.slash_command(description="Search Floor Price(바닥가 보기)")
