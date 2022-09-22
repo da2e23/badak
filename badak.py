@@ -1,5 +1,6 @@
 from email import message
 from multiprocessing.connection import wait
+from random import choices
 import requests
 from concurrent.futures import ThreadPoolExecutor
 from urllib.request import Request, urlopen
@@ -158,7 +159,7 @@ async def input_project(interaction: Interaction,
 #바닥가 검색
 @bot.slash_command(description="Search Floor Price(바닥가 보기)")
 async def select_project(interaction: Interaction,
-    project: str = SlashOption(name="project", description="프로젝트 명을 입력하세요 (Enter Project Name)",autocomplete=list_search),
+    project: str = SlashOption(name="project", description="프로젝트 명을 입력하세요 (Enter Project Name)",choices=list_search),
     ):
     url = f"https://api.opensea.io/api/v1/collection/{project}?format=json"
     response = requests.request("GET", url)
