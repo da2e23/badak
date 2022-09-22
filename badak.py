@@ -18,7 +18,8 @@ from nextcord.ext import commands
 from nextcord import Interaction, SlashOption, ChannelType
 import os
 
-bot = commands.Bot(command_prefix = "/",intents=discord.Intents.all())
+# bot = commands.Bot(command_prefix = "/",intents=discord.Intents.all())
+bot = commands.Bot(command_prefix = "/")
 project_list =[]
 async def list_search(ctx):
     return sorted([i for i in worksheet.col_values(1) if i.startswith(ctx.value.lower())]) # from your database
