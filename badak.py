@@ -4,15 +4,15 @@ import requests
 from concurrent.futures import ThreadPoolExecutor
 from urllib.request import Request, urlopen
 import time
-import nextcord 
+import discord
 import interactions
 from spreadsheet import *
 from exchangerate import *
 from getmyprice import *
-from nextcord.ext import menus
-from nextcord.ext.menus import button, First, Last
+from discord.ext import menus
+from discord.ext.menus import button, First, Last
 from asyncore import loop
-from nextcord.ext import commands
+from discord.ext import commands
 # from discord.commands import Option
 import os
 
