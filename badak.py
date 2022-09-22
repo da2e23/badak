@@ -20,7 +20,7 @@ from nextcord import Interaction, SlashOption, ChannelType
 import os
 
 # bot = commands.Bot(command_prefix = "/",intents=discord.Intents.all())
-bot = commands.Bot(command_prefix = "/")
+bot = commands.Bot()
 project_list =[]
 async def list_search(interaction):
     return sorted([i for i in worksheet.col_values(1) if i.startswith(interaction.value.lower())]) # from your database
