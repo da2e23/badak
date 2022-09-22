@@ -13,7 +13,7 @@ from discord.ext import menus
 from discord.ext.menus import button, First, Last
 from asyncore import loop
 from discord.ext import commands
-from discord import option
+from discord.commands import Option
 import os
 
 bot = commands.Bot(command_prefix = "/",intents=discord.Intents.all())
@@ -121,16 +121,13 @@ async def on_ready():
 
 @bot.command(description="Import New Project(프로젝트 추가하기)")
 # @discord.ext.commands.bot_has_any_role('Co-Founder')
-@option(
-    "projectName",
-    str, 
-    description="프로젝트 키워드를 입력하세요 (Enter the Project keyword)"
-)
-async def input_project(ctx,projectName):
+async def input_project(ctx,
+    project: Option(str, "프로젝트 키워드를 입력하세요 (Enter the Project keyword)"), # str 타입으로 입력 받음
+    ):
     # print(discord.id)
     print(bot.get_channel(1020470142330749008))
     list = worksheet.col_values(1)
-    if {projectName} in list:
+    if project in list:
         embed = discord.Embed(title="Error" ,description=project+'는 이미 존재하는 Project 입니다.', color=0xe67e22)
         embed.set_footer(text="Honey Bottle")
         await ctx.respond(embed=embed) # f-string 사용
@@ -140,7 +137,7 @@ async def input_project(ctx,projectName):
         response = requests.request("GET", url)
         try:    
             project_name  = response.json()['collection']['name']
-            worksheet.append_row([{projectName}])
+            worksheet.append_row([project])
             embed = discord.Embed(title=project_name ,description=project_name+'를 추가하였습니다.', color=0x3498db)
             embed.add_field(name="Open Sea", value=f"[link](https://opensea.io/collection/{project})", inline=False)
             embed.set_footer(text="Honey Bottle🍯 | Badak")
@@ -160,7 +157,7 @@ async def input_project(ctx,projectName):
 #     project: Option(str, "다음 중 고르세요.", choices=list_search),
 #     ):
 async def select_project(ctx: discord.ApplicationContext,
-    project: discord.Option(str, "프로젝트 명을 입력하세요 (Enter Project Name)", autocomplete=list_search),
+    project: Option(str, "프로젝트 명을 입력하세요 (Enter Project Name)", autocomplete=list_search),
     ):
     url = f"https://api.opensea.io/api/v1/collection/{project}?format=json"
     response = requests.request("GET", url)
@@ -215,7 +212,7 @@ async def show_all(ctx):
 
 @bot.command(description="Item's floor price in my wallet(내 지갑 ITEM 바닥가 보기)")
 async def my_wallet(ctx,
-    address: discord.Option(str, "지갑주소 입력 (Enter yout Wallet Address"), # str 타입으로 입력 받음
+    address: Option(str, "지갑주소 입력 (Enter yout Wallet Address"), # str 타입으로 입력 받음
     ):
     # print(discord.id)
     print(bot.get_channel)
@@ -334,7 +331,7 @@ async def my_wallet(ctx,
         
 @bot.command(description="See My Collections(내 컬렉션 보기)")
 async def my_item(ctx,
-    address: discord.Option(str, "지갑주소 입력 (Enter yout Wallet Address"), # str 타입으로 입력 받음
+    address: Option(str, "지갑주소 입력 (Enter yout Wallet Address"), # str 타입으로 입력 받음
     ):
     
     url = "https://opensea15.p.rapidapi.com/api/v1/assets?format=json"
