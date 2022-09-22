@@ -11,7 +11,7 @@ from spreadsheet import *
 from exchangerate import *
 from getmyprice import *
 from discord.ext import menus
-from nextcord.ext.menus import button, First, Last
+from discord.ext.menus import button, First, Last
 from asyncore import loop
 from nextcord.ext import commands
 # from discord.commands import Option
