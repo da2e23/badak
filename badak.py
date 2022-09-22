@@ -381,4 +381,4 @@ async def my_item(interaction: Interaction,
 
 token=os.environ.get('token')      
 port = int(os.environ.get("PORT", 17995))
-bot.run(token, host='0.0.0.0', port=port) # 봇 실행
+bot.run(token) # 봇 실행
