@@ -127,23 +127,24 @@ async def on_ready():
 async def input_project(interaction: Interaction,
     project: str = SlashOption(name="project", description="프로젝트 키워드를 입력하세요 (Enter the Project keyword)"),
     ):
-    # print(discord.id)
+   # print(discord.id)
+    print(bot.get_channel(1020470142330749008))
     list = worksheet.col_values(1)
-    if {project} in list:
-        embed = discord.Embed(title="Error" ,description={project}+'는 이미 존재하는 Project 입니다.', color=0xe67e22)
+    if project in list:
+        embed = discord.Embed(title="Error" ,description=project+'는 이미 존재하는 Project 입니다.', color=0xe67e22)
         embed.set_footer(text="Honey Bottle")
         await interaction.reply(embed=embed) # f-string 사용
         return None
     else: 
-        url = "https://api.opensea.io/api/v1/collection/"+project+"?format=json"
+        url = "https://api.opensea.io/api/v1/collection/{project}?format=json"
         response = requests.request("GET", url)
         try:    
             project_name  = response.json()['collection']['name']
-            worksheet.append_row([project])
+            worksheet.append_row([{project}])
             embed = discord.Embed(title=project_name ,description=project_name+'를 추가하였습니다.', color=0x3498db)
             embed.add_field(name="Open Sea", value=f"[link](https://opensea.io/collection/{project})", inline=False)
             embed.set_footer(text="Honey Bottle🍯 | Badak")
-            await interaction.reply(embed=embed,ephemeral = True)
+            await interaction.reply(embed=embed)
         except KeyError:
             embed = discord.Embed(title="Error" ,description='You enter wrong keyword', color=0xe74c3c)
             await interaction.reply(embed=embed,ephemeral = True)
