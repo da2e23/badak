@@ -10,7 +10,7 @@ import interactions
 from spreadsheet import *
 from exchangerate import *
 from getmyprice import *
-from nextcord.ext import menus
+from discord.ext import menus
 from nextcord.ext.menus import button, First, Last
 from asyncore import loop
 from nextcord.ext import commands
