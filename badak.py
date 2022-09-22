@@ -122,15 +122,15 @@ async def on_ready():
     print(bot.user.id)
     print('====================================')
 
-@bot.slash_command(description="Import New Project(프로젝트 추가하기)")
 # @discord.ext.commands.bot_has_any_role('Co-Founder')
+@bot.slash_command(description="Import New Project(프로젝트 추가하기)")
 async def input_project(interaction: Interaction,
     project: str = SlashOption(name="project", description="프로젝트 키워드를 입력하세요 (Enter the Project keyword)"),
     ):
     # print(discord.id)
     list = worksheet.col_values(1)
-    if project in list:
-        embed = discord.Embed(title="Error" ,description=project+'는 이미 존재하는 Project 입니다.', color=0xe67e22)
+    if {project} in list:
+        embed = discord.Embed(title="Error" ,description={project}+'는 이미 존재하는 Project 입니다.', color=0xe67e22)
         embed.set_footer(text="Honey Bottle")
         await interaction.reply(embed=embed) # f-string 사용
         return None
@@ -155,13 +155,6 @@ async def input_project(interaction: Interaction,
 
 #바닥가 검색
 @bot.slash_command(description="Search Floor Price(바닥가 보기)")
-# async def select_project(ctx,
-#     project: Option(str, "다음 중 고르세요.", choices=list_search),
-#     ):
-
-# async def select_project(ctx: discord.ApplicationContext,
-#     project: Option(str, "프로젝트 명을 입력하세요 (Enter Project Name)", autocomplete=list_search),
-#     ):
 async def select_project(interaction: Interaction,
     project: str = SlashOption(name="project", description="프로젝트 명을 입력하세요 (Enter Project Name)",autocomplete=list_search),
     ):
