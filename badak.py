@@ -258,7 +258,7 @@ async def my_wallet(ctx,interaction: Interaction,
         formatter = MySource_price(all_data, per_page=7)
         menu = MyMenuPages(formatter,timeout=6.0, delete_message_after=True)
         await menu.start(ctx)
-        await interaction.reply("Successful", ephemeral = True)
+        await interaction.response.send_message("Successful", ephemeral = True)
         # global time_second
         # message = await ctx.send('5초 후에 삭제됩니다.')
         # for x in range(5,0,-1):# This works well as it should!
