@@ -1,1 +1,1 @@
-web: python badak.py
+worker: python badak.py
