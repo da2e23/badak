@@ -145,7 +145,6 @@ async def select_project(interaction: nextcord.Interaction,
     url = f"https://api.opensea.io/api/v1/collection/{project}?format=json"
     response = requests.request("GET", url)
     try:
-        print(nextcord.channel.id)
         print(">>>>>>>>>>>>>>>>>>>>>>> 바닥가 검색")
         project_name  = response.json()['collection']['name']
         pay_token  = response.json()['collection']['payment_tokens'][0]['symbol']
