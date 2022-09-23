@@ -199,11 +199,15 @@ async def select_project(interaction: nextcord.Interaction,
         
 @select_project.on_autocomplete("project")
 async def autocomplete_list(interaction: nextcord.Interaction, project: str):
-    filtered_project = []
     filtered_project=worksheet.col_values(1)
-    data_list = [];
+    options
     if project:
+        if(project.length>25):
+            options = project.slice(0, 25);
+        else:
+            options = project;
         filtered_project = sorted([i for i in filtered_project if i.startswith(project.lower())])
+        
     await interaction.response.send_autocomplete(filtered_project)
 
                                                          
