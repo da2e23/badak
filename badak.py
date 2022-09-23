@@ -153,7 +153,7 @@ async def input_project(interaction: Interaction,
 
 #바닥가 검색
 @bot.slash_command(description="Search Floor Price(바닥가 보기)")
-async def select_project(ctx, interaction: Interaction,
+async def select_project(ctx,
     project: str = SlashOption(name="project", description="프로젝트 명을 입력하세요 (Enter Project Name)",autocomplete=True),
     ):
     url = f"https://api.opensea.io/api/v1/collection/{project}?format=json"
@@ -191,13 +191,13 @@ async def select_project(ctx, interaction: Interaction,
         embed.add_field(name="\u200b", value="\u200b", inline=True)
         embed.set_footer(text="Honey Bottle🍯 | Badak")
         embed.set_image(url=image)
-        await interaction.reply(embed=embed) # f-string 사용
+        await ctx.respond(embed=embed) # f-string 사용
     except KeyError:
         embed = discord.Embed(title="Error" ,description='Wrong Name', color=0xe74c3c)
-        await interaction.reply(embed=embed,ephemeral = True)
+        await ctx.respond(embed=embed,ephemeral = True)
     except TypeError:
         embed = discord.Embed(title="Error" ,description='There is no such project', color=0xe74c3c)
-        await interaction.reply(embed=embed,ephemeral = True)
+        await ctx.respond(embed=embed,ephemeral = True)
         
 @select_project.on_autocomplete("project")
 async def autocomplete_list(interaction: Interaction, project: str):
@@ -208,15 +208,15 @@ async def autocomplete_list(interaction: Interaction, project: str):
 
                                                          
 @bot.slash_command(description="Whole list of project(전체 리스트 보기)")
-async def show_all(ctx,interaction:Interaction):
+async def show_all(ctx):
     list = sorted(worksheet.col_values(1))
     formatter = MySource(list, per_page=8)
     menu = menus.MenuPages(formatter)
-    await menu.start(interaction=interaction)
-    await interaction.response.send_message("Successful", ephemeral = True)
+    await menu.start(ctx)
+    await ctx.respond("Successful", ephemeral = True)
 
 @bot.slash_command(description="Item's floor price in my wallet(내 지갑 ITEM 바닥가 보기)")
-async def my_wallet(ctx,interaction: Interaction,
+async def my_wallet(ctx,
     address: str = SlashOption(name="address", description="ETH 지갑주소 입력 (Enter your ETH Wallet Address"),
     ):
     # print(discord.id)
@@ -262,8 +262,8 @@ async def my_wallet(ctx,interaction: Interaction,
         
         formatter = MySource_price(all_data, per_page=7)
         menu = MyMenuPages(formatter,timeout=6.0, delete_message_after=True)
-        await menu.start(interaction=interaction)
-        await interaction.response.send_message("Successful", ephemeral = True)
+        await menu.start(ctx)
+        await ctx.response.send_message("Successful", ephemeral = True)
         # global time_second
         # message = await ctx.send('5초 후에 삭제됩니다.')
         # for x in range(5,0,-1):# This works well as it should!
@@ -276,7 +276,7 @@ async def my_wallet(ctx,interaction: Interaction,
         #     await message.edit(content=content)
     except KeyError:
         embed = discord.Embed(title="Error" ,description='Wrong Address', color=0xe74c3c)
-        await interaction.reply(embed=embed,ephemeral = True)
+        await ctx.respond(embed=embed,ephemeral = True)
     
 
 # @bot.slash_command(description="Item's floor price in my klaytn wallet (내 지갑 klaytn ITEM 바닥가 보기)")
@@ -335,7 +335,7 @@ async def my_wallet(ctx,interaction: Interaction,
 #     # await ctx.send("수정중")
 
 @bot.slash_command(description="See My Collections(내 컬렉션 보기)")
-async def my_item(ctx,interaction: Interaction,
+async def my_item(ctx,
     address: str = SlashOption(name="address", description=" ETH 지갑주소 입력 (Enter your ETH Wallet Address"),  
     ):
     
@@ -371,12 +371,12 @@ async def my_item(ctx,interaction: Interaction,
         # await ctx.respond(embed=embed) # f-string 사용
         formatter = MySource_item(all_data, per_page=1)
         menu = MyMenuPages(formatter,timeout=5.0, delete_message_after=True)
-        await menu.start(interaction=interaction)
-        await interaction.reply("Successful", ephemeral = True)
+        await menu.start(ctx)
+        await ctx.respond("Successful", ephemeral = True)
     # await ApplicationContext.send(content='',ephemeral=True,embeds = menu, delete_after=30)
     except KeyError:
         embed = discord.Embed(title="**!Error" ,description='Wrong Address', color=0xe74c3c)
-        await interaction.reply(embed=embed,ephemeral = True)
+        await ctx.respond(embed=embed,ephemeral = True)
 
 
 token=os.environ.get('token')      
