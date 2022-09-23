@@ -207,7 +207,7 @@ async def select_project(ctx, interaction: Interaction,
 async def autocomplete_list(interaction: Interaction, project: str):
     if project:
         filtered_project = sorted([i for i in worksheet.col_values(1) if i.startswith(project.lower())])
-    await interaction.response.send_autocomplete(filtered_project)
+    await interaction.response.send_autocomplete( sorted([i for i in worksheet.col_values(1) if i.lower().startswith(project.lower())]))
                                                          
 @bot.slash_command(description="Whole list of project(전체 리스트 보기)")
 async def show_all(ctx,interaction:Interaction):
