@@ -127,7 +127,7 @@ async def on_ready():
 @bot.slash_command(description="Import New Project(프로젝트 추가하기)")
 # @discord.ext.commands.bot_has_any_role('Co-Founder')
 async def input_project(interaction: Interaction,
-    project: str = SlashOption(name="project", description="프로젝트 키워드를 입력하세요 (Enter Project Keyword)"), # str 타입으로 입력 받음
+    project: str = SlashOption(name="project", description="프로젝트 키워드를 입력하세요 (Enter Project Keyword)", choices=column_data), # str 타입으로 입력 받음
     ):
     # print(discord.id)
     print(bot.get_channel(1020470142330749008))
