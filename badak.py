@@ -340,7 +340,7 @@ async def my_wallet(interaction: nextcord.Interaction,
 #     # await ctx.send("수정중")
 
 @bot.slash_command(description="See My Collections(내 컬렉션 보기)")
-async def my_item(ctx,
+async def my_item(interaction: nextcord.Interaction,
     address: str = SlashOption(name="address", description=" ETH 지갑주소 입력 (Enter your ETH Wallet Address"),  
     ):
     
@@ -376,7 +376,7 @@ async def my_item(ctx,
         # await interaction.response.send_message(embed=embed) # f-string 사용
         formatter = MySource_item(all_data, per_page=1)
         menu = MyMenuPages(formatter,timeout=5.0, delete_message_after=True)
-        await menu.start(ctx)
+        await menu.start(interaction=interaction)
         await interaction.response.send_message("Successful", ephemeral = True)
     # await ApplicationContext.send(content='',ephemeral=True,embeds = menu, delete_after=30)
     except KeyError:
