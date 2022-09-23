@@ -205,9 +205,9 @@ async def select_project(ctx, interaction: Interaction,
         await interaction.reply(embed=embed,ephemeral = True)
 @select_project.on_autocomplete("project")
 async def autocomplete_list(interaction: Interaction, project: str):
+    filtered_project=worksheet.col_values(1)
     if project:
         filtered_project = sorted([i for i in worksheet.col_values(1) if i.startswith(project.lower())])
-        print(filtered_project)
     await interaction.response.send_autocomplete(filtered_project)
                                                          
 @bot.slash_command(description="Whole list of project(전체 리스트 보기)")
