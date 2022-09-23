@@ -203,8 +203,8 @@ async def autocomplete_list(interaction: nextcord.Interaction, project: str):
     data_list = [];
     if project:
         filtered_project = sorted([i for i in filtered_project if i.startswith(project.lower())])
-        if(len(filtered_project)>25):
-            for i in range(25):
+        if(len(filtered_project)>24):
+            for i in range(24):
                 data_list.append(filtered_project[i])
             filtered_project=data_list
     await interaction.response.send_autocomplete(filtered_project)
