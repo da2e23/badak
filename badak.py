@@ -79,7 +79,7 @@ class MyMenuPages(menus.MenuPages, inherit_buttons=False):
 #discord.ext menus/ nextcord.ext menus
 class MySource(menus.ListPageSource):
     async def format_page(self, menu, entries):
-        embed = discord.Embed(title="Project List" ,description='', color=0xf1c40f)
+        embed = nextcord.Embed(title="Project List" ,description='', color=0xf1c40f)
         for i in entries:
             embed.add_field(name="\u200b", value=f"{i}", inline=False)
         embed.set_footer(text="Honey Bottle🍯 | Badak")
@@ -88,7 +88,7 @@ class MySource_price(menus.ListPageSource):
     async def format_page(self, menu, entries):
         global gs
         print(gs.total_sum)
-        embed = discord.Embed(title="What's In my Wallet" 
+        embed = nextcord.Embed(title="What's In my Wallet" 
                               ,description=''
                               , color=0xf1c40f)
         for i in range(len(entries)):
@@ -102,7 +102,7 @@ class MySource_item(menus.ListPageSource):
     async def format_page(self, menu, entries):
         print(entries[0])
         print(entries[1])
-        embed = discord.Embed(title="MY ITEM" 
+        embed = nextcord.Embed(title="MY ITEM" 
                               ,description=''
                               , color=0x3498db)
         embed.add_field(name="item", value=entries[0], inline=True)
