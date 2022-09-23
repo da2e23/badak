@@ -202,7 +202,7 @@ async def autocomplete_list(interaction: nextcord.Interaction, project: str):
     filtered_project=worksheet.col_values(1)
     if project:
         filtered_project = sorted([i for i in filtered_project if i.startswith(project.lower())])
-    options
+    options=''
     for i in range(len(filtered_project)):
         if(filtered_project[i].length>25):
             options = filtered_project[i].slice(0, 25);
