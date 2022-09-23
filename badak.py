@@ -7,11 +7,10 @@ from urllib.request import Request, urlopen
 import time
 # import discord
 import nextcord
-import interactions
 from spreadsheet import *
 from exchangerate import *
 from getmyprice import *
-from discord.ext.menus import button, First, Last
+from nextcord.ext.menus import button, First, Last
 from asyncore import loop
 from nextcord.ext import commands,menus
 # from discord.commands import Option
