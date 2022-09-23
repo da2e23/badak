@@ -376,7 +376,7 @@ async def my_item(ctx,interaction: Interaction,
     # await ApplicationContext.send(content='',ephemeral=True,embeds = menu, delete_after=30)
     except KeyError:
         embed = discord.Embed(title="**!Error" ,description='Wrong Address', color=0xe74c3c)
-        await interaction.respond(embed=embed,ephemeral = True)
+        await interaction.reply(embed=embed,ephemeral = True)
 
 
 token=os.environ.get('token')      
