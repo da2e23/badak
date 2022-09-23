@@ -128,7 +128,7 @@ async def input_project(interaction: nextcord.Interaction,
     if project in list:
         embed = discord.Embed(title="Error" ,description=project+'는 이미 존재하는 Project 입니다.', color=0xe67e22)
         embed.set_footer(text="Honey Bottle")
-        await interaction.reply(embed=embed) # f-string 사용
+        await interaction.response.send_message(embed=embed) # f-string 사용
         return None
     else: 
         url = "https://api.opensea.io/api/v1/collection/{project}?format=json"
@@ -139,14 +139,14 @@ async def input_project(interaction: nextcord.Interaction,
             embed = discord.Embed(title=project_name ,description=project_name+'를 추가하였습니다.', color=0x3498db)
             embed.add_field(name="Open Sea", value=f"[link](https://opensea.io/collection/{project})", inline=False)
             embed.set_footer(text="Honey Bottle🍯 | Badak")
-            await interaction.reply(embed=embed)
+            await interaction.response.send_message(embed=embed)
         except KeyError:
             embed = discord.Embed(title="Error" ,description='You enter wrong keyword', color=0xe74c3c)
-            await interaction.reply(embed=embed,ephemeral = True)
+            await interaction.response.send_message(embed=embed,ephemeral = True)
     # else:
     #     embed = discord.Embed(title="Error" ,description='이곳에서는 입력할 수 없는 명령어 입니다.', color=0x62c1cc)
     #     embed.set_footer(text="Honey Bottle")
-    #     await interaction.reply(embed=embed) # f-string 사용
+    #     await interaction.response.send_message(embed=embed) # f-string 사용
     #     return None
 
 #바닥가 검색
@@ -189,13 +189,13 @@ async def select_project(interaction: nextcord.Interaction,
         embed.add_field(name="\u200b", value="\u200b", inline=True)
         embed.set_footer(text="Honey Bottle🍯 | Badak")
         embed.set_image(url=image)
-        await interaction.reply(embed=embed) # f-string 사용
+        await interaction.response.send_message(embed=embed) # f-string 사용
     except KeyError:
         embed = discord.Embed(title="Error" ,description='Wrong Name', color=0xe74c3c)
-        await interaction.reply(embed=embed,ephemeral = True)
+        await interaction.response.send_message(embed=embed,ephemeral = True)
     except TypeError:
         embed = discord.Embed(title="Error" ,description='There is no such project', color=0xe74c3c)
-        await interaction.reply(embed=embed,ephemeral = True)
+        await interaction.response.send_message(embed=embed,ephemeral = True)
         
 @select_project.on_autocomplete("project")
 async def autocomplete_list(interaction: nextcord.Interaction,n, project: str):
@@ -211,7 +211,7 @@ async def show_all(interaction: nextcord.Interaction):
     formatter = MySource(list, per_page=8)
     menu = menus.MenuPages(formatter)
     await menu.start(interaction=interaction)
-    await interaction.reply("Successful", ephemeral = True)
+    await interaction.response.send_message("Successful", ephemeral = True)
 
 @bot.slash_command(description="Item's floor price in my wallet(내 지갑 ITEM 바닥가 보기)")
 async def my_wallet(interaction: nextcord.Interaction,
@@ -274,7 +274,7 @@ async def my_wallet(interaction: nextcord.Interaction,
         #     await message.edit(content=content)
     except KeyError:
         embed = discord.Embed(title="Error" ,description='Wrong Address', color=0xe74c3c)
-        await interaction.reply(embed=embed,ephemeral = True)
+        await interaction.response.send_message(embed=embed,ephemeral = True)
     
 
 # @bot.slash_command(description="Item's floor price in my klaytn wallet (내 지갑 klaytn ITEM 바닥가 보기)")
@@ -366,15 +366,15 @@ async def my_item(ctx,
         #     embed.add_field(name="Image", value="\u200b",image = list_item_image[i], inline=True)
         #     embed.add_field(name="\u200b", value="\u200b", inline=True)
         # embed.set_footer(text="Honey Bottle🍯 | Badak")
-        # await interaction.reply(embed=embed) # f-string 사용
+        # await interaction.response.send_message(embed=embed) # f-string 사용
         formatter = MySource_item(all_data, per_page=1)
         menu = MyMenuPages(formatter,timeout=5.0, delete_message_after=True)
         await menu.start(ctx)
-        await interaction.reply("Successful", ephemeral = True)
+        await interaction.response.send_message("Successful", ephemeral = True)
     # await ApplicationContext.send(content='',ephemeral=True,embeds = menu, delete_after=30)
     except KeyError:
         embed = discord.Embed(title="**!Error" ,description='Wrong Address', color=0xe74c3c)
-        await interaction.reply(embed=embed,ephemeral = True)
+        await interaction.response.send_message(embed=embed,ephemeral = True)
 
 
 token=os.environ.get('token')      
