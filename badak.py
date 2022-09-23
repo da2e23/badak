@@ -198,7 +198,7 @@ async def select_project(interaction: nextcord.Interaction,
         await interaction.response.send_message(embed=embed,ephemeral = True)
         
 @select_project.on_autocomplete("project")
-async def autocomplete_list(interaction: nextcord.Interaction,n, project: str):
+async def autocomplete_list(interaction: nextcord.Interaction, project: str):
     filtered_project=worksheet.col_values(1)
     if project:
         filtered_project = sorted([i for i in filtered_project if i.startswith(project.lower())])
