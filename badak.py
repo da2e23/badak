@@ -127,7 +127,7 @@ async def on_ready():
 @bot.slash_command(description="Import New Project(프로젝트 추가하기)")
 # @discord.ext.commands.bot_has_any_role('Co-Founder')
 async def input_project(interaction: Interaction,
-    project: str = SlashOption(name="project", description="프로젝트 키워드를 입력하세요 (Enter Project Keyword)", choices=column_data), # str 타입으로 입력 받음
+    project: str = SlashOption(name="project", description="프로젝트 키워드를 입력하세요 (Enter Project Keyword)"), # str 타입으로 입력 받음
     ):
     # print(discord.id)
     print(bot.get_channel(1020470142330749008))
@@ -159,7 +159,7 @@ async def input_project(interaction: Interaction,
 #바닥가 검색
 @bot.slash_command(description="Search Floor Price(바닥가 보기)")
 async def select_project(ctx, interaction: Interaction,
-    project: str,
+    project: str = SlashOption(name="project", description="프로젝트 명을 입력하세요 (Enter Project Name)",autocomplete=True),
     ):
     url = f"https://api.opensea.io/api/v1/collection/{project}?format=json"
     response = requests.request("GET", url)
@@ -208,9 +208,9 @@ async def select_project(ctx, interaction: Interaction,
 async def autocomplete_list(interaction: Interaction, project: str):
     filtered_project=column_data
     if project:
-        filtered_project = sorted([i for i in column_data if i.startswith(project.lower())])
+        filtered_project = sorted([i for i in filtered_project if i.startswith(project.lower())])
     await interaction.response.send_autocomplete(filtered_project)
-    return filtered_project
+
                                                          
 @bot.slash_command(description="Whole list of project(전체 리스트 보기)")
 async def show_all(ctx,interaction:Interaction):
