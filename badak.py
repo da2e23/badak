@@ -199,7 +199,7 @@ async def select_project(interaction: nextcord.Interaction,
         
 @select_project.on_autocomplete("project")
 async def autocomplete_list(interaction: nextcord.Interaction, project: str):
-    filtered_project=worksheet.col_values(1)
+    filtered_project=sorted(worksheet.col_values(1))
     if project:
         filtered_project = sorted([i for i in filtered_project if i.startswith(project.lower())])
     temp=[]
