@@ -206,7 +206,7 @@ async def autocomplete_list(interaction: nextcord.Interaction, project: str):
     for i in range(len(filtered_project)):
         if(len(filtered_project[i])>25):
             temp = filtered_project[i]
-            temp = temp[0,25]
+            temp = temp[0:25]
             filtered_project[i]=temp
         else:
             temp = filtered_project[i];    
