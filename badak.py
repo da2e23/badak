@@ -20,8 +20,6 @@ import os
 # bot = commands.Bot(command_prefix = "/",intents=discord.Intents.all())
 bot = commands.Bot()
 project_list =[]
-async def list_search(ctx):
-    return sorted([i for i in worksheet.col_values(1) if i.startswith(ctx.value.lower())]) # from your database
 
 #지갑 바닥가 가져오기
 async def get_own_floorprice(session,url):
@@ -35,16 +33,6 @@ class getSum():
     def get_total_sum(self,list):
         self.total_sum = sum(filter(None,list))
 gs = getSum(0.0)
-
-#time 변수
-class getTime():
-    def __init__(self, time):
-        self.time = time
-    def time_reset(self):
-        self.time = 5
-    def time_setting(self,g_time):
-        self.time = g_time          
-time_second = getTime(0)
 
 # async def get_own_floorprice(list,price):
 #     for i in list:
@@ -157,6 +145,7 @@ async def select_project(interaction: nextcord.Interaction,
     url = f"https://api.opensea.io/api/v1/collection/{project}?format=json"
     response = requests.request("GET", url)
     try:
+        print(nextcord.channel.id)
         print(">>>>>>>>>>>>>>>>>>>>>>> 바닥가 검색")
         project_name  = response.json()['collection']['name']
         pay_token  = response.json()['collection']['payment_tokens'][0]['symbol']
@@ -206,7 +195,6 @@ async def autocomplete_list(interaction: nextcord.Interaction, project: str):
     if len(filtered_project)>25:
         for i in range(25):
             temp.append(filtered_project[i])
-            print(temp)
         filtered_project=temp
 
     await interaction.response.send_autocomplete(filtered_project)
