@@ -18,25 +18,6 @@ from nextcord.ext import commands
 # from discord.commands import Option
 from nextcord import Interaction, SlashOption, ChannelType
 import os
-import gspread
-from oauth2client.service_account import ServiceAccountCredentials
-
-scope = [
-'https://spreadsheets.google.com/feeds',
-'https://www.googleapis.com/auth/drive',
-]
-CREDENTIALS = os.environ.get('GOOGLE_APPLICATION_CREDENTIALS')
-
-credentials = ServiceAccountCredentials.from_json_keyfile_name(CREDENTIALS, scope)
-gc = gspread.authorize(credentials)
-spreadsheet_url = os.environ.get("SPREAD_SHEETS_URL")
-# 스프레스시트 문서 가져오기 
-doc = gc.open_by_url(spreadsheet_url)
-# 시트 선택하기
-worksheet = doc.worksheet('Name')
-
-column_data = worksheet.col_values(1)
-print(column_data)
 
 # bot = commands.Bot(command_prefix = "/",intents=discord.Intents.all())
 bot = commands.Bot()
@@ -130,11 +111,6 @@ class MySource_item(menus.ListPageSource):
         embed.set_image(url=entries[1])
         embed.set_footer(text="Honey Bottle🍯 | Badak")
         return embed
-async def start_item_menu(ctx,all_data):
-    formatter = MySource_item(all_data, per_page=1)
-    menu = menus.MenuPages(formatter)
-    await menu.start(ctx)
-    return ''
 
 @bot.event
 async def on_ready():
@@ -225,7 +201,7 @@ async def select_project(ctx, interaction: Interaction,
         
 @select_project.on_autocomplete("project")
 async def autocomplete_list(interaction: Interaction, project: str):
-    filtered_project=column_data
+    filtered_project=worksheet.col_values(1)
     if project:
         filtered_project = sorted([i for i in filtered_project if i.startswith(project.lower())])
     await interaction.response.send_autocomplete(filtered_project)
@@ -233,10 +209,10 @@ async def autocomplete_list(interaction: Interaction, project: str):
                                                          
 @bot.slash_command(description="Whole list of project(전체 리스트 보기)")
 async def show_all(ctx,interaction:Interaction):
-    list = sorted(column_data)
+    list = sorted(worksheet.col_values(1))
     formatter = MySource(list, per_page=8)
     menu = menus.MenuPages(formatter)
-    await menu.start(ctx)
+    await menu.start(interaction=interaction)
     await interaction.response.send_message("Successful", ephemeral = True)
 
 @bot.slash_command(description="Item's floor price in my wallet(내 지갑 ITEM 바닥가 보기)")
@@ -286,7 +262,7 @@ async def my_wallet(ctx,interaction: Interaction,
         
         formatter = MySource_price(all_data, per_page=7)
         menu = MyMenuPages(formatter,timeout=6.0, delete_message_after=True)
-        await menu.start(ctx)
+        await menu.start(interaction=interaction)
         await interaction.response.send_message("Successful", ephemeral = True)
         # global time_second
         # message = await ctx.send('5초 후에 삭제됩니다.')
@@ -395,7 +371,7 @@ async def my_item(ctx,interaction: Interaction,
         # await ctx.respond(embed=embed) # f-string 사용
         formatter = MySource_item(all_data, per_page=1)
         menu = MyMenuPages(formatter,timeout=5.0, delete_message_after=True)
-        await menu.start(ctx)
+        await menu.start(interaction=interaction)
         await interaction.reply("Successful", ephemeral = True)
     # await ApplicationContext.send(content='',ephemeral=True,embeds = menu, delete_after=30)
     except KeyError:
