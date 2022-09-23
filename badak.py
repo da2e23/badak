@@ -203,7 +203,12 @@ async def select_project(ctx, interaction: Interaction,
     except TypeError:
         embed = discord.Embed(title="Error" ,description='There is no such project', color=0xe74c3c)
         await interaction.reply(embed=embed,ephemeral = True)
-        
+@select_project.on_autocomplete("project")
+async def autocomplete_list(interaction: Interaction, project: str):
+    if project:
+        filtered_project = sorted([i for i in worksheet.col_values(1) if i.startswith(project.lower())])
+    await interaction.response.send_autocomplete(filtered_project)
+                                                         
 @bot.slash_command(description="Whole list of project(전체 리스트 보기)")
 async def show_all(ctx,interaction:Interaction):
     list = sorted(worksheet.col_values(1))
