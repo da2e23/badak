@@ -159,7 +159,7 @@ async def input_project(interaction: Interaction,
 #바닥가 검색
 @bot.slash_command(description="Search Floor Price(바닥가 보기)")
 async def select_project(ctx, interaction: Interaction,
-    project: str = SlashOption(name="project", description="프로젝트 명을 입력하세요 (Enter Project Name)",autocomplete=True,autocomplete_callback=list_search),
+    project: str = SlashOption(name="project", description="프로젝트 명을 입력하세요 (Enter Project Name)",autocomplete=True),
     ):
     url = f"https://api.opensea.io/api/v1/collection/{project}?format=json"
     response = requests.request("GET", url)
@@ -207,7 +207,8 @@ async def select_project(ctx, interaction: Interaction,
 async def autocomplete_list(interaction: Interaction, project: str):
     if project:
         filtered_project = sorted([i for i in worksheet.col_values(1) if i.startswith(project.lower())])
-    await interaction.response.send_autocomplete( sorted([i for i in worksheet.col_values(1) if i.lower().startswith(project.lower())]))
+        print(filtered_project)
+    await interaction.response.send_autocomplete(filtered_project)
                                                          
 @bot.slash_command(description="Whole list of project(전체 리스트 보기)")
 async def show_all(ctx,interaction:Interaction):
