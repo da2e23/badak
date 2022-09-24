@@ -119,7 +119,7 @@ async def input_project(interaction: nextcord.Interaction,
         await interaction.response.send_message(embed=embed) # f-string 사용
         return None
     else: 
-        url = "https://api.opensea.io/api/v1/collection/{project}?format=json"
+        url = f"https://api.opensea.io/api/v1/collection/{project}?format=json"
         response = requests.request("GET", url)
         try:    
             project_name  = response.json()['collection']['name']
