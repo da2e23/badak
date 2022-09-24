@@ -124,12 +124,12 @@ async def input_project(interaction: nextcord.Interaction,
         try:    
             project_name  = response.json()['collection']['name']
             worksheet.append_row([project])
-            embed = discord.Embed(title=project_name ,description=project_name+'를 추가하였습니다.', color=0x3498db)
+            embed = nextcord.Embed(title=project_name ,description=project_name+'를 추가하였습니다.', color=0x3498db)
             embed.add_field(name="Open Sea", value=f"[link](https://opensea.io/collection/{project})", inline=False)
             embed.set_footer(text="Honey Bottle🍯 | Badak")
             await interaction.response.send_message(embed=embed)
         except KeyError:
-            embed = discord.Embed(title="Error" ,description='You enter wrong keyword', color=0xe74c3c)
+            embed = nextcord.Embed(title="Error" ,description='You enter wrong keyword', color=0xe74c3c)
             await interaction.response.send_message(embed=embed,ephemeral = True)
     # else:
     #     embed = discord.Embed(title="Error" ,description='이곳에서는 입력할 수 없는 명령어 입니다.', color=0x62c1cc)
