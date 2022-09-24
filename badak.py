@@ -15,6 +15,7 @@ from asyncore import loop
 from nextcord.ext import commands,menus
 # from discord.commands import Option
 from nextcord import Interaction, SlashOption, ChannelType
+from datetime import datetime
 import os
 
 # bot = commands.Bot(command_prefix = "/",intents=discord.Intents.all())
@@ -378,12 +379,13 @@ async def coin_price(interaction: nextcord.Interaction,
     response = requests.request("GET", url_all_coin)
     coin_all_list = response.json()
     print(">>>>>>>>>>>>>>>>>>>>>>> 코인 거래가 바닥가 검색")
-    index_coin = 0;
-    coin.split('(')
-    coin.split(')')
+    index_coin = 0
+    coin_name = coin.split('(')
+    key =coin_name[len(coin_name)-1].split(')')
+    print( coin_name[len(coin_name)-1])
     for i in range(len(coin_all_list)):
         temp = coin_all_list[i]
-        if temp['korean_name']==(coin[0]):
+        if temp['market']==(key[0]):
             index_coin = i    
     print('>>>>>>>>>>>>>> index_coin : '+str(index_coin))
     coin_keyword = coin_all_list[index_coin]['market']
@@ -393,10 +395,11 @@ async def coin_price(interaction: nextcord.Interaction,
     url = f"https://api.upbit.com/v1/ticker?markets={coin_keyword}"
     response_c = requests.request("GET", url)
     print(response_c.json())
-    trade_date = response_c.json()[0]['trade_date']
+    trade_date = response_c.json()[0]['trade_date'] 
     trade_price = response_c.json()[0]['trade_price']
-    embed = discord.Embed(title=coin_name+'(in Upbit)' ,description='', color=0x3498db)
-    embed.add_field(name="거래 일시", value=trade_date, inline=False)
+    dt_format =datetime.strptime(trade_date, '%Y%m%d')
+    embed = discord.Embed(title=coin_name+'('+coin_keyword+') by.Upbit' ,description='', color=0x3498db)
+    embed.add_field(name="거래 일시", value=dt_format.strftime('%Y-%m-%d'), inline=False)
     embed.add_field(name="거래 가격", value=format(trade_price,','), inline=False)
     embed.set_footer(text="Honey Bottle🍯 | Badak")
     await interaction.response.send_message(embed=embed) # f-string 사용
