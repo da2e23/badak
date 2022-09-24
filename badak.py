@@ -114,7 +114,7 @@ async def input_project(interaction: nextcord.Interaction,
     print(bot.get_channel(1020470142330749008))
     list = worksheet.col_values(1)
     if project in list:
-        embed = discord.Embed(title="Error" ,description=project+'는 이미 존재하는 Project 입니다.', color=0xe67e22)
+        embed = nextcord.Embed(title="Error" ,description=project+'는 이미 존재하는 Project 입니다.', color=0xe67e22)
         embed.set_footer(text="Honey Bottle")
         await interaction.response.send_message(embed=embed) # f-string 사용
         return None
