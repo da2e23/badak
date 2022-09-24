@@ -369,7 +369,62 @@ async def my_item(interaction: nextcord.Interaction,
     except KeyError:
         embed = discord.Embed(title="**!Error" ,description='Wrong Address', color=0xe74c3c)
         await interaction.response.send_message(embed=embed,ephemeral = True)
+        
+@bot.slash_command(description="Search Coin Price(코인 거래가 검색)")
+async def coin_price(interaction: nextcord.Interaction,
+    coin: str = SlashOption(name="coin", description="프로젝트 명을 입력하세요 (Enter Project Name)",autocomplete=True),
+    ):
+    url_all_coin = "https://api.upbit.com/v1/market/all"
+    response = requests.request("GET", url_all_coin)
+    coin_all_list = response.json()
+    print(">>>>>>>>>>>>>>>>>>>>>>> 코인 거래가 바닥가 검색")
+    index_coin = 0;
+    coin.split('(')
+    coin.split(')')
+    for i in range(len(coin_all_list)):
+        temp = coin_all_list[i]
+        if temp['korean_name']==(coin[0]):
+            index_coin = i    
+    print('>>>>>>>>>>>>>> index_coin : '+str(index_coin))
+    coin_keyword = coin_all_list[index_coin]['market']
+    coin_name = coin_all_list[index_coin]['korean_name']
+    print('>>>>>>>>>>>>>> coin_keyword : '+str(coin_keyword))
+    # try:
+    url = f"https://api.upbit.com/v1/ticker?markets={coin_keyword}"
+    response_c = requests.request("GET", url)
+    print(response_c.json())
+    trade_date = response_c.json()[0]['trade_date']
+    trade_price = response_c.json()[0]['trade_price']
+    embed = discord.Embed(title=coin_name+'(in Upbit)' ,description='', color=0x3498db)
+    embed.add_field(name="거래 일시", value=trade_date, inline=False)
+    embed.add_field(name="거래 가격", value=format(trade_price,','), inline=False)
+    embed.set_footer(text="Honey Bottle🍯 | Badak")
+    await interaction.response.send_message(embed=embed) # f-string 사용
+    # except KeyError:
+    #     embed = discord.Embed(title="Error" ,description='Wrong Coin Name', color=0xe74c3c)
+    #     await interaction.response.send_message(embed=embed,ephemeral = True)
+    # except TypeError:
+    #     embed = discord.Embed(title="Error" ,description='Wrong Coin Name', color=0xe74c3c)
+    #     await interaction.response.send_message(embed=embed,ephemeral = True)
+        
+@coin_price.on_autocomplete("coin")
+async def autocomplete_coin_price(interaction: nextcord.Interaction, coin: str):
+    url_all_coin = "https://api.upbit.com/v1/market/all"
+    response = requests.request("GET", url_all_coin)
+    coin_all_list = response.json()
+    coin_list=[]
+    for i in range(len(coin_all_list)):
+        coin_list.append(coin_all_list[i]['korean_name']+'('+coin_all_list[i]['market']+')')
+    filtered_coin_list=sorted(coin_list)
+    if coin:
+        filtered_coin_list = sorted([i for i in filtered_coin_list if i.startswith(coin.lower())])
+    temp=[]
+    if len(filtered_coin_list)>25:
+        for i in range(25):
+            temp.append(filtered_coin_list[i])
+        filtered_coin_list=temp
 
+    await interaction.response.send_autocomplete(filtered_coin_list)
 
 token=os.environ.get('token')      
 port = int(os.environ.get("PORT", 17995))
