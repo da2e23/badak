@@ -428,7 +428,18 @@ async def autocomplete_coin_price(interaction: nextcord.Interaction, coin: str):
         filtered_coin_list=temp
 
     await interaction.response.send_autocomplete(filtered_coin_list)
-
+    
+@bot.slash_command(description="USD to KRW(달러-원화 변환)")
+async def usd_to_krw(interaction: nextcord.Interaction,
+    dollar: int = SlashOption(name="dollar", description="Enter Dollar amount"),
+    ):
+    show_krw_price = dollar*upbit_get_usd_krw()
+    embed = discord.Embed(title='USD To KRW' ,description='', color=0x3498db)
+    embed.add_field(name="USD", value='$ '+str(format(dollar,',')), inline=False)
+    embed.add_field(name="KRW", value=str(format(show_krw_price,','))+'원', inline=False)
+    embed.set_footer(text="Honey Bottle🍯 | Badak")
+    await interaction.response.send_message(embed=embed) # f-string 사용
+    
 token=os.environ.get('token')      
 port = int(os.environ.get("PORT", 17995))
 bot.run(token) # 봇 실행
