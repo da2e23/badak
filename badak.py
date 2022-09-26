@@ -434,9 +434,20 @@ async def usd_to_krw(interaction: nextcord.Interaction,
     dollar: int = SlashOption(name="dollar", description="Enter Dollar amount"),
     ):
     show_krw_price = dollar*upbit_get_usd_krw()
-    embed = discord.Embed(title='USD To KRW' ,description='', color=0x3498db)
+    embed = discord.Embed(title='USD to KRW(달러-원화 변환)' ,description='', color=0x3498db)
     embed.add_field(name="USD", value='$ '+str(format(dollar,',')), inline=False)
     embed.add_field(name="KRW", value=str(format(show_krw_price,','))+'원', inline=False)
+    embed.set_footer(text="Honey Bottle🍯 | Badak")
+    await interaction.response.send_message(embed=embed) # f-string 사용
+
+@bot.slash_command(description="USD to KRW(달러-원화 변환)")
+async def krw_to_usd(interaction: nextcord.Interaction,
+    won: int = SlashOption(name="won", description="Enter Won amount"),
+    ):
+    show_usd_price = upbit_get_usd_krw()/won
+    embed = discord.Embed(title='KRW to USD(원화-달러 변환)' ,description='', color=0x3498db)
+    embed.add_field(name="KRW", value=str(format(won,','))+'원', inline=False)
+    embed.add_field(name="USD", value='$ '+str(format(show_usd_price,',')), inline=False)
     embed.set_footer(text="Honey Bottle🍯 | Badak")
     await interaction.response.send_message(embed=embed) # f-string 사용
     
